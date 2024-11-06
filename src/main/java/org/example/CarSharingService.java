@@ -29,7 +29,6 @@ public class CarSharingService {
 
 
     public void rentCar(User user, Car car, int rentalDuration) {
-        // Check if the car model exists in the carAvailability map
         if (car == null || !carAvailability.containsKey(car.getModel())) {
             System.out.println("Sorry, the car model " + car.getModel() + " is not available.");
             return;
@@ -40,20 +39,12 @@ public class CarSharingService {
             return;
         }
 
-        // Strategy Pattern - Payment options
         PaymentStrategy paymentMethod = user.getPaymentStrategy();
         double price = car.getPrice();
-        // Calculate price based on rental duration (discount for long-term rentals)
         price = calculateRentalPrice(price, rentalDuration);
         paymentMethod.pay(price);
-
-        // Observer Pattern - Notify User about successful booking
         user.notifyBooking(car);
-
-        // Mark car as unavailable
         carAvailability.put(car.getModel(), false);
-
-        // Final success message after rental
         System.out.println("Success! Your rental for the " + car.getModel() + " has been confirmed for " + rentalDuration + " days.");
         System.out.println("You have successfully rented the " + car.getModel() + " for " + rentalDuration + " days.");
     }
